@@ -1,7 +1,8 @@
-import multer, { FileFilterCallback } from "multer";
-import { Request } from "express";
-import ErrorHandler from "../utils/ErrorHandler";
 import { StatusCodes } from "http-status-codes";
+import { Request } from "express";
+import multer, { FileFilterCallback } from "multer";
+
+import ErrorHandler from "../utils/ErrorHandler";
 
 const multerStorage = multer.memoryStorage();
 const multerFilter = (
