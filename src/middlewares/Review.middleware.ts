@@ -10,4 +10,5 @@ export const setTourUserIds = (
     // @ts-ignore
     req.body.user = req.user.id;
   }
+  next();
 };

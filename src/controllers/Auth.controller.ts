@@ -31,9 +31,6 @@ const generateToken = (
 
   res.cookie("Authorization", token, cookieOptions);
 
-  // Remove password from output
-  user.password = "";
-
   res.status(statusCode).json({
     status: "success",
     token,

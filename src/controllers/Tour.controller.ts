@@ -1,6 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response, NextFunction } from "express";
+import { v6 as uuidv6 } from "uuid";
+import sharp from "sharp";
 
+import { upload } from "../configs/multer.config";
 import Tour from "../models/Tour.model";
 import {
   getAll,
@@ -10,6 +13,43 @@ import {
   deleteOne,
 } from "./Factory.controller";
 import AsyncHandler from "../utils/AsyncHandler";
+
+export const uploadTourImages = upload.fields([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 3 },
+]);
+
+export const resizeTourImages = AsyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    // @ts-ignore
+    if (!req.files.imageCover || !req.files.images) {
+      return next();
+    }
+
+    const id = uuidv6();
+    req.body.imageCover = `tour-${id}-cover.jpeg`;
+    // @ts-ignore
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333)
+      .toFormat("jpeg")
+      .toFile(`public/images/tours/${req.body.imageCover}`);
+
+    req.body.images = [];
+    await Promise.all(
+      // @ts-ignore
+      req.files.images.map(async (file, i) => {
+        const fileName = `tour-${id}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(2000, 1333)
+          .toFormat("jpeg")
+          .toFile(`public/images/tours/${fileName}`);
+
+        req.body.images.push(fileName);
+      }),
+    );
+    next();
+  },
+);
 
 export const getAllTours = getAll(Tour);
 export const getTour = getOne(Tour, { path: "reviews" });

@@ -7,14 +7,9 @@ enum Difficulty {
   HARD = "Difficult",
 }
 
-interface Coordinates {
-  longitude: number;
-  latitude: number;
-}
-
 interface Location {
   type: string;
-  coordinates: Coordinates;
+  coordinates: [number, number];
   address: string;
   description: string;
   day?: number;

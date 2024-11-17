@@ -80,7 +80,14 @@ const userSchema = new Schema<IUserDocument>(
       select: false,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        delete ret.password;
+      },
+    },
+  },
 );
 
 // Query Middleware
@@ -97,7 +104,7 @@ userSchema.pre("save", async function (next) {
   }
 
   this.password = await bcrypt.hash(this.password, 12);
-  this.passwordConfirm = "";
+  this.passwordConfirm = undefined;
   next();
 });
 

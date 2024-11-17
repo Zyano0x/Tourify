@@ -8,7 +8,9 @@ import {
   getMonthlyPlan,
   getTour,
   getTourStats,
+  resizeTourImages,
   updateTour,
+  uploadTourImages,
 } from "../controllers/Tour.controller";
 import reviewRoutes from "../routes/Review.route";
 import { protect, authorizeRoles } from "../middlewares/Auth.middleware";
@@ -29,12 +31,24 @@ router
 router
   .route("/")
   .get(getAllTours)
-  .post(protect, authorizeRoles(Role.MODERATOR, Role.ADMIN), createTour);
+  .post(
+    protect,
+    authorizeRoles(Role.MODERATOR, Role.ADMIN),
+    uploadTourImages,
+    resizeTourImages,
+    createTour,
+  );
 
 router
   .route("/:id")
   .get(getTour)
-  .delete(protect, authorizeRoles(Role.MODERATOR, Role.ADMIN), deleteTour)
-  .patch(protect, authorizeRoles(Role.MODERATOR, Role.ADMIN), updateTour);
+  .patch(
+    protect,
+    authorizeRoles(Role.MODERATOR, Role.ADMIN),
+    uploadTourImages,
+    resizeTourImages,
+    updateTour,
+  )
+  .delete(protect, authorizeRoles(Role.MODERATOR, Role.ADMIN), deleteTour);
 
 export default router;

@@ -11,7 +11,7 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET_KEY || "",
   JWT_EXPIRES: process.env.JWT_EXPIRES_IN,
   JWT_COOKIE_EXPIRES: process.env.JWT_COOKIE_EXPIRES_IN
-    ? Number(process.env.JWT_COOKIE_EXPIRES)
+    ? Number(process.env.JWT_COOKIE_EXPIRES_IN)
     : 30,
   EMAIL_HOST: process.env.EMAIL_HOST,
   EMAIL_PORT: process.env.EMAIL_PORT ? Number(process.env.EMAIL_PORT) : 2525,
